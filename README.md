@@ -15,9 +15,3 @@ Tasks for following topics:
 * User Interface
 * Application Transformation
 * Services
-
-
-Languages:
-* English
-* Ukrainian
-* Russian
