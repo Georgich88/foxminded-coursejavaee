@@ -4,6 +4,8 @@
  */
 package com.coursejavaee.cleancode.anagrams;
 
+import java.util.Scanner;
+
 /**
  * An class that reverses all the words of input text. All non-letter symbols
  * should stay on the same places. Uses Latin alphabet for test only.
@@ -14,9 +16,18 @@ package com.coursejavaee.cleancode.anagrams;
 public class AnagramMaker {
 
     /**
-     * The value is used for delimiting sentence into words.
+     * Tests anagram creation via standard input
+     * 
+     * @param args
      */
-    public static final String DELIMITER = "\b";
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter sentence:");
+        String text = scanner.nextLine();
+        scanner.close();
+        System.out.println(AnagramMaker.makeAnagram(text));
+
+    }
 
     /**
      * Gets the original sentence and convert it into anagrams sentence.
@@ -34,7 +45,7 @@ public class AnagramMaker {
         StringBuilder outputSentence = new StringBuilder();
 
         // Separate sentences into words.
-        for (String splitIn : inputSentence.split(DELIMITER)) {
+        for (String splitIn : inputSentence.split(" ", 2)) {
 
             char[] word = splitIn.toCharArray();
             String reversedWord = reverseWord(word);
