@@ -19,11 +19,15 @@ public class Application {
      * @param args
      */
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter sentence:");
-        String text = scanner.nextLine();
+        String inputSentence = scanner.nextLine();
         scanner.close();
-        System.out.println(AnagramMaker.makeAnagram(text));
+
+        String outputSentence = AnagramMaker.makeAnagram(inputSentence);
+
+        System.out.println(outputSentence);
 
     }
 

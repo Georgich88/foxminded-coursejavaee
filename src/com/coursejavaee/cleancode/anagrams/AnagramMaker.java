@@ -13,9 +13,6 @@ package com.coursejavaee.cleancode.anagrams;
  */
 public class AnagramMaker {
 
-    /**
-     * The value is used for delimiting sentence into words.
-     */
     public static final String DELIMITER = "\b";
 
     /**
@@ -23,23 +20,22 @@ public class AnagramMaker {
      * 
      * @param inputSentence - an original sentence.
      * @return an anagrams sentence.
-     * @throws IllegalArgumentException if inputSentence.length() == 0
      */
-    public static String makeAnagram(String inputSentence) throws IllegalArgumentException {
+    public static String makeAnagram(String inputSentence) {
 
         if (inputSentence.length() == 0) {
-            throw new IllegalArgumentException("An empty input text");
+            return "";
         }
 
         StringBuilder outputSentence = new StringBuilder();
 
         // Separate sentences into words.
-        for (String splitIn : inputSentence.split(DELIMITER)) {
-
-            char[] word = splitIn.toCharArray();
-            String reversedWord = reverseWord(word);
+        String[] words = inputSentence.split(DELIMITER);
+        for (String word : words) {
+            char[] charsOfWord = word.toCharArray();
+            String reversedWord = reverseWord(charsOfWord);
             outputSentence.append(reversedWord);
-            outputSentence.append(" ");
+            outputSentence.append(DELIMITER);
         }
 
         return outputSentence.toString().trim();
@@ -68,11 +64,11 @@ public class AnagramMaker {
         // Paste a non-letter characters in the reversed string. E.g. "dcba" => "d1cba".
         int letterCounts = 0;
         for (int i = 0; i < word.length; i++) {
-            if (!Character.isLetter(word[i])) {
-                reversedWord[i] = word[i];
-            } else {
+            if (Character.isLetter(word[i])) {
                 reversedWord[i] = onlyLettersReversedWord[letterCounts];
                 letterCounts++;
+            } else {
+                reversedWord[i] = word[i];
             }
         }
 
