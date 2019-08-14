@@ -1,4 +1,4 @@
-package com.coursejavaee.cleancode.anagrams;
+package com.foxminded.rodin.anagram;
 
 import java.util.Scanner;
 

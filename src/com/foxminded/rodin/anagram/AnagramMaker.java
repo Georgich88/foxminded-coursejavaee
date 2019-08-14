@@ -1,4 +1,4 @@
-package com.coursejavaee.cleancode.anagrams;
+package com.foxminded.rodin.anagram;
 
 public class AnagramMaker {
 
@@ -25,12 +25,6 @@ public class AnagramMaker {
         return outputSentence.toString().trim();
     }
 
-    /**
-     * Gets a word and reverse it without moving non-letter symbols.
-     * 
-     * @param word - an original word.
-     * @return a reversed word.
-     */
     private static String reverseWord(char[] word) {
 
         char[] reversedWord = new char[word.length];
@@ -44,8 +38,7 @@ public class AnagramMaker {
         onlyLettersWord.reverse();
         char[] onlyLettersReversedWord = onlyLettersWord.toString().toCharArray();
 
-        int letterCounts = 0;
-        for (int i = 0; i < word.length; i++) {
+        for (int i = 0, letterCounts = 0; i < word.length; i++) {
             if (Character.isLetter(word[i])) {
                 reversedWord[i] = onlyLettersReversedWord[letterCounts];
                 letterCounts++;
