@@ -50,14 +50,4 @@ public class AnagramMaker {
         return new String(reversedWord);
     }
 
-    /**
-     * Gets a word and reverses it.
-     * 
-     * @param word - an original word.
-     * @return a reversed word.
-     */
-    public static String getReversedWord(String word) {
-        char[] charsOfWord = word.toCharArray();
-        return reverseWord(charsOfWord);
-    }
 }
