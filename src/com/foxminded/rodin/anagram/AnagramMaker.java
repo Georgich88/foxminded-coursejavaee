@@ -1,4 +1,4 @@
-package com.foxminded.rodin.anagram;
+package com.coursejavaee.cleancode.anagrams;
 
 public class AnagramMaker {
 
