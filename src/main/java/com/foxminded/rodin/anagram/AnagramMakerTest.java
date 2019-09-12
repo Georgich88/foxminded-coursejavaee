@@ -1,8 +1,6 @@
 package com.foxminded.rodin.anagram;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,74 +9,68 @@ public class AnagramMakerTest {
     @Test
     public void shouldRevertSentence() {
 
-        String sentence = "abcd efgh a1bcd efg!h";
-        String expectedResult = "dcba hgfe d1cba hgf!e";
+        String input = "abcd efgh a1bcd efg!h";
 
-        String result = AnagramMaker.makeAnagram(sentence);
+        String result = AnagramMaker.makeAnagram(input);
 
-        assertEquals(expectedResult, result);
+        assertEquals("dcba hgfe d1cba hgf!e", result);
     }
 
     @Test
     public void shouldNotRevertNumbers() {
 
-        String sentence = "3.14 23,2 2,7182818284590452353602874713527 12.3456";
-        String expectedResult = "3.14 23,2 2,7182818284590452353602874713527 12.3456";
+        String input = "3.14 23,2 2,7182818284590452353602874713527 12.3456";
 
-        String result = AnagramMaker.makeAnagram(sentence);
+        String result = AnagramMaker.makeAnagram(input);
 
-        assertEquals(expectedResult, result);
+        assertEquals("3.14 23,2 2,7182818284590452353602874713527 12.3456", result);
     }
 
     @Test
     public void shouldNotRevertSpecialCharacters() {
 
-        String sentence = "!@#$%^ @#_+~~~~~ 7$$<>{}";
-        String expectedResult = "!@#$%^ @#_+~~~~~ 7$$<>{}";
+        String input = "!@#$%^ @#_+~~~~~ 7$$<>{}";
 
-        String result = AnagramMaker.makeAnagram(sentence);
+        String result = AnagramMaker.makeAnagram(input);
 
-        assertEquals(expectedResult, result);
+        assertEquals("!@#$%^ @#_+~~~~~ 7$$<>{}", result);
 
     }
 
     @Test
     public void shouldNotRevertNotLatinSymbols() {
 
-        String sentence = "维基百科，自由";
-        String expectedResult = "科百基维，由自";
+        String input = "⺐⺑⺒⺓⺔⺕， ⻤⻥⻦⻧";
 
-        String result = AnagramMaker.makeAnagram(sentence);
+        String result = AnagramMaker.makeAnagram(input);
 
-        assertNotEquals(expectedResult, result);
+        assertEquals(input, result);
     }
 
     @Test
     public void shouldReturnNullPointerExceptionIfGetNullArgument() {
 
-        assertThrows(NullPointerException.class, () -> {
-            String result = AnagramMaker.makeAnagram(null);
-        });
+        String result = AnagramMaker.makeAnagram(null);
 
+        assertEquals(result, null);
     }
 
     @Test
     public void shouldMakeWrongAnagramFromSenteceDividedByTab() {
 
-        String sentence = "This\ttext\ttabDelimiter\tdivided\tby\ttabs";
-        String expectedResult = "sihT\ttxet\tsi\tdedivid\tyb\tsbat";
+        String input = "This\ttext\ttabDelimiter\tdivided\tby\ttabs";
 
-        String result = AnagramMaker.makeAnagram(sentence);
+        String result = AnagramMaker.makeAnagram(input);
 
-        assertNotEquals(expectedResult, result);
+        assertEquals("sbat\tybde\tdividretimil\teDbattx\tet\tsihT", result);
     }
 
     @Test
     public void shouldReturnEmptyStringIfGetEmptyString() {
 
-        String resultAnagram = AnagramMaker.makeAnagram("");
+        String result = AnagramMaker.makeAnagram("");
 
-        assertEquals(resultAnagram, "");
+        assertEquals(result, "");
 
     }
 
