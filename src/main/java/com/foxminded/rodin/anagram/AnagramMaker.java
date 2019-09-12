@@ -12,6 +12,10 @@ public class AnagramMaker {
      */
     public static String makeAnagram(String inputSentence) {
 
+        if (inputSentence == null) {
+            return null;
+        }
+
         StringBuilder outputSentence = new StringBuilder();
 
         String[] words = inputSentence.split(WORDS_DELIMITER);
