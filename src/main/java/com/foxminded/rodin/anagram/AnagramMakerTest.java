@@ -1,6 +1,7 @@
 package com.foxminded.rodin.anagram;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -50,9 +51,10 @@ public class AnagramMakerTest {
     @Test
     public void shouldReturnNullPointerExceptionIfGetNullArgument() {
 
-        String result = AnagramMaker.makeAnagram(null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            String result = AnagramMaker.makeAnagram(null);
+        });
 
-        assertEquals(result, null);
     }
 
     @Test

@@ -10,10 +10,10 @@ public class AnagramMaker {
      * @param inputSentence - an original sentence.
      * @return an anagrams sentence.
      */
-    public static String makeAnagram(String inputSentence) {
+    public static String makeAnagram(String inputSentence) throws IllegalArgumentException {
 
         if (inputSentence == null) {
-            return null;
+            throw new IllegalArgumentException("Input sentence should be a string value.");
         }
 
         StringBuilder outputSentence = new StringBuilder();
