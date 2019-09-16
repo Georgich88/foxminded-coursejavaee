@@ -13,7 +13,7 @@ public class AnagramMaker {
     public static String makeAnagram(String inputSentence) throws IllegalArgumentException {
 
         if (inputSentence == null) {
-            throw new IllegalArgumentException("Input sentence should be a string value.");
+            throw new IllegalArgumentException("Input sentence should not be null.");
         }
 
         StringBuilder outputSentence = new StringBuilder();
