@@ -1,14 +1,17 @@
 package com.foxminded.rodin.integerdivision;
 
-public class IntegerDivision {
+public class IntegerDivisionVisualizer {
 
-    private int dividend = 0;
-    private int divisor = 0;
-    private int result = 0;
+    private int dividend;
+    private int divisor;
+    private int result;
+
+    private static final String COLUMN_PRINTING_TYPE_SEPARATOR = "WithDivisorSeparator";
+    private static final String COLUMN_PRINTING_TYPE_RESULT = "WithResult";
 
     private StringBuilder resultBuilder;
 
-    public IntegerDivision(int dividend, int divisor) {
+    public IntegerDivisionVisualizer(int dividend, int divisor) {
         this.dividend = dividend;
         this.divisor = divisor;
     }
@@ -20,18 +23,26 @@ public class IntegerDivision {
      */
     public String performDivision() throws ArithmeticException {
 
+        if (dividend == 0) {
+            throw new ArithmeticException("Dividend should not be zero");
+        }
+
+        if (divisor == 0) {
+            throw new ArithmeticException("Divisor should not be zero");
+        }
+
+        if (dividend < 0) {
+            throw new ArithmeticException("Dividend should be a positive number");
+        }
+
+        if (divisor < 0) {
+            throw new ArithmeticException("Divisor should be a positive number");
+        }
+
         if (dividend <= divisor) {
             throw new ArithmeticException("Dividend should be greater than divisor");
         }
-        
-        if (dividend <= 0) {
-            throw new ArithmeticException("Dividend should be a positive number");            
-        }
- 
-        if (divisor <= 0) {
-            throw new ArithmeticException("Divisor should be a positive number");            
-        }    
-        
+
         resultBuilder = new StringBuilder();
 
         result = dividend / divisor;
@@ -39,7 +50,7 @@ public class IntegerDivision {
         int currentDividend = dividend;
         int currentDivisor = divisor;
         int shift = 0;
-        String currentPrintingMethod = "WithDivisorSeparator";
+        String currentPrintingMethod = COLUMN_PRINTING_TYPE_SEPARATOR;
 
         printDividendAndDivisor(dividend, divisor);
 
@@ -47,24 +58,24 @@ public class IntegerDivision {
 
             int[] currentresultsOfDivision = intermediateDivision(currentDividend, currentDivisor, shift,
                     currentPrintingMethod);
-            
+
             currentDividend = currentresultsOfDivision[0];
             shift = currentresultsOfDivision[1];
 
-            if (currentPrintingMethod == "WithDivisorSeparator") {
-                currentPrintingMethod = "WithResult";
+            if (currentPrintingMethod.equals(COLUMN_PRINTING_TYPE_SEPARATOR)) {
+                currentPrintingMethod = COLUMN_PRINTING_TYPE_RESULT;
 
-            } else if (currentPrintingMethod == "WithResult") {
+            } else if (currentPrintingMethod.equals(COLUMN_PRINTING_TYPE_RESULT)) {
                 currentPrintingMethod = "";
             }
         }
-        
+
         printLastColumn(currentDividend, shift);
-        
+
         return resultBuilder.toString();
     }
 
-    public int countDigits(int numberForCounting) {
+    private int countDigits(int numberForCounting) {
         if (numberForCounting != 0) {
             return (int) Math.log10(Math.abs(numberForCounting)) + 1;
         } else {
@@ -72,12 +83,12 @@ public class IntegerDivision {
         }
     }
 
-    public void printDividendAndDivisor(int dividend, int divisor) {
+    private void printDividendAndDivisor(int dividend, int divisor) {
         resultBuilder.append("_" + dividend + "|" + divisor + "\n");
 
     }
 
-    public int[] intermediateDivision(int dividend, int divisor, int shift, String printingType) {
+    private int[] intermediateDivision(int dividend, int divisor, int shift, String printingType) {
 
         int remainder = 0;
         int digitsNumber = countDigits(dividend) - countDigits(divisor);
@@ -92,9 +103,9 @@ public class IntegerDivision {
             dividend = dividend - (remainder * pow10(countDigits(dividend) - (countDigits(quotient))));
         }
 
-        if (printingType == "WithDivisorSeparator") {
+        if (printingType.equals(COLUMN_PRINTING_TYPE_SEPARATOR)) {
             printColumnWithDivisorSeparator(quotient, remainder);
-        } else if (printingType == "WithResult") {
+        } else if (printingType.equals(COLUMN_PRINTING_TYPE_RESULT)) {
             printColumnWithResult(quotient, remainder, shift);
         } else {
             printColumn(quotient, remainder, shift);
