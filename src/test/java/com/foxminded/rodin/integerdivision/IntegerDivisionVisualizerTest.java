@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 public class IntegerDivisionVisualizerTest {
 
     @Test
-    public void shouldReturnCorrectResultCase1() {
+    public void shouldReturnCorrectResultWhenDivisionOfEvenNumberByOddNumber() {
 
-        IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer(78945, 4);
+        IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer();
 
-        assertEquals(integerDivisionVisualizer.performDivision(), 
+        assertEquals(integerDivisionVisualizer.performDivision(78945, 4), 
                 "_78945|4\n" + 
                 " 4    |-----\n" + 
                 "_38   |19736\n" + 
@@ -33,11 +33,11 @@ public class IntegerDivisionVisualizerTest {
     
     
     @Test
-    public void shouldReturnCorrectResultCase2() {
+    public void shouldReturnCorrectResultWhenDivisionOfOddNumberByOddNumber() {
 
-        IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer(78945, 45);
+        IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer();
 
-        assertEquals(integerDivisionVisualizer.performDivision(), 
+        assertEquals(integerDivisionVisualizer.performDivision(78945, 45), 
                 "_78945|45\n" + 
                 " 45   |----\n" + 
                 "_339  |1754\n" + 
@@ -54,11 +54,11 @@ public class IntegerDivisionVisualizerTest {
     }
     
     @Test
-    public void shouldReturnCorrectResultCase3() {
+    public void shouldReturnCorrectResultWhenDivisionOfEvenNumberByEvenNumber() {
 
-        IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer(500, 4);
+        IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer();
 
-        assertEquals(integerDivisionVisualizer.performDivision(), 
+        assertEquals(integerDivisionVisualizer.performDivision(500, 4), 
                 "_500|4\n" + 
                 " 4  |---\n" + 
                 "_10 |125\n" + 
@@ -73,61 +73,61 @@ public class IntegerDivisionVisualizerTest {
  
     
     @Test
-    public void shouldThrowArithmeticExceptionIfDividendLessThanDivisor() {
+    public void shouldThrowIllegalArgumentExceptionIfDividendLessThanDivisor() {
 
-        assertThrows(ArithmeticException.class, () -> {
-            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer(1, 600);
-            String result = integerDivisionVisualizer.performDivision();
+        assertThrows(IllegalArgumentException.class, () -> {
+            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer();
+            String result = integerDivisionVisualizer.performDivision(1, 600);
         });
 
     }    
     
     @Test
-    public void shouldThrowArithmeticExceptionIfDividendIsNegative() {
+    public void shouldThrowIllegalArgumentExceptionIfDividendIsNegative() {
 
-        assertThrows(ArithmeticException.class, () -> {
-            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer(-1, 600);
-            String result = integerDivisionVisualizer.performDivision();
+        assertThrows(IllegalArgumentException.class, () -> {
+            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer();
+            String result = integerDivisionVisualizer.performDivision(-1, 600);
         });
 
     }  
     
     @Test
-    public void shouldThrowArithmeticExceptionIfDivisorIsNegative() {
+    public void shouldThrowIllegalArgumentExceptionIfDivisorIsNegative() {
 
-        assertThrows(ArithmeticException.class, () -> {
-            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer(-1, 600);
-            String result = integerDivisionVisualizer.performDivision();
+        assertThrows(IllegalArgumentException.class, () -> {
+            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer();
+            String result = integerDivisionVisualizer.performDivision(-1, 600);
         });
 
     }      
  
     @Test
-    public void shouldThrowArithmeticExceptionIfDividendIsZero() {
+    public void shouldThrowIllegalArgumentExceptionIfDividendIsZero() {
 
-        assertThrows(ArithmeticException.class, () -> {
-            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer(0, 10);
-            String result = integerDivisionVisualizer.performDivision();
+        assertThrows(IllegalArgumentException.class, () -> {
+            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer();
+            String result = integerDivisionVisualizer.performDivision(0, 10);
         });
 
     }
 
     @Test
-    public void shouldThrowArithmeticExceptionIfDivisorIsZero() {
+    public void shouldThrowIllegalArgumentExceptionIfDivisorIsZero() {
 
-        assertThrows(ArithmeticException.class, () -> {
-            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer(0, 10);
-            String result = integerDivisionVisualizer.performDivision();
+        assertThrows(IllegalArgumentException.class, () -> {
+            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer();
+            String result = integerDivisionVisualizer.performDivision(0, 10);
         });
 
     } 
     
     @Test
-    public void shouldThrowArithmeticExceptionIfDivisorIsNumberOne() {
+    public void shouldThrowIllegalArgumentExceptionIfDivisorIsNumberOne() {
 
-        assertThrows(ArithmeticException.class, () -> {
-            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer(1, 2);
-            String result = integerDivisionVisualizer.performDivision();
+        assertThrows(IllegalArgumentException.class, () -> {
+            IntegerDivisionVisualizer integerDivisionVisualizer = new IntegerDivisionVisualizer();
+            String result = integerDivisionVisualizer.performDivision(1, 2);
         });
 
     }       

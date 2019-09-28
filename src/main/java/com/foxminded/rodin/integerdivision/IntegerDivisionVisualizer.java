@@ -8,40 +8,42 @@ public class IntegerDivisionVisualizer {
 
     private static final String COLUMN_PRINTING_TYPE_SEPARATOR = "WithDivisorSeparator";
     private static final String COLUMN_PRINTING_TYPE_RESULT = "WithResult";
+    private static final String COLUMN_PRINTING_TYPE_PLAIN = "Plain";
+
+    private static final String VERTICAL_BAR_SEPARATOR = "|";
+    private static final String MINUS_SYMBOL = "_";
+    private static final String SPACE_SEPARATOR = " ";
+    private static final String NEWLINE_SEPARATOR = "\n";
+    private static final String HORIZONTAL_LINE_SEPARATOR = "-";
 
     private StringBuilder resultBuilder;
 
-    public IntegerDivisionVisualizer(int dividend, int divisor) {
-        this.dividend = dividend;
-        this.divisor = divisor;
+    public IntegerDivisionVisualizer() {
     }
 
     /**
      * Performs integer division computation.
      * 
+     * @param inputDividend the input dividend for division computation.
+     * @param inputDivisor  the input divisor for division computation.
      * @return an string presentation of computation.
      */
-    public String performDivision() throws ArithmeticException {
+    public String performDivision(int inputDividend, int inputDivisor) throws IllegalArgumentException {
 
-        if (dividend == 0) {
-            throw new ArithmeticException("Dividend should not be zero");
+        if (inputDividend <= 0) {
+            throw new IllegalArgumentException("Dividend should be a positive number");
         }
 
-        if (divisor == 0) {
-            throw new ArithmeticException("Divisor should not be zero");
+        if (inputDivisor <= 0) {
+            throw new IllegalArgumentException("Divisor should be a positive number");
         }
 
-        if (dividend < 0) {
-            throw new ArithmeticException("Dividend should be a positive number");
+        if (inputDividend <= inputDivisor) {
+            throw new IllegalArgumentException("Dividend should be greater than divisor");
         }
 
-        if (divisor < 0) {
-            throw new ArithmeticException("Divisor should be a positive number");
-        }
-
-        if (dividend <= divisor) {
-            throw new ArithmeticException("Dividend should be greater than divisor");
-        }
+        dividend = inputDividend;
+        divisor = inputDivisor;
 
         resultBuilder = new StringBuilder();
 
@@ -66,7 +68,7 @@ public class IntegerDivisionVisualizer {
                 currentPrintingMethod = COLUMN_PRINTING_TYPE_RESULT;
 
             } else if (currentPrintingMethod.equals(COLUMN_PRINTING_TYPE_RESULT)) {
-                currentPrintingMethod = "";
+                currentPrintingMethod = COLUMN_PRINTING_TYPE_PLAIN;
             }
         }
 
@@ -84,7 +86,7 @@ public class IntegerDivisionVisualizer {
     }
 
     private void printDividendAndDivisor(int dividend, int divisor) {
-        resultBuilder.append("_" + dividend + "|" + divisor + "\n");
+        resultBuilder.append(MINUS_SYMBOL + dividend + VERTICAL_BAR_SEPARATOR + divisor + NEWLINE_SEPARATOR);
 
     }
 
@@ -126,13 +128,13 @@ public class IntegerDivisionVisualizer {
     }
 
     private void printColumn(int quotient, int remainder, int shift) {
-        resultBuilder.append("\n");
-        printCharacter(shift, ' ');
-        resultBuilder.append("_" + quotient + "\n");
-        printCharacter(shift, ' ');
-        resultBuilder.append(" " + remainder + "\n");
-        printCharacter(shift + 1, ' ');
-        printCharacter(countDigits(quotient), '-');
+        resultBuilder.append(NEWLINE_SEPARATOR);
+        printSymbol(shift, SPACE_SEPARATOR);
+        resultBuilder.append(MINUS_SYMBOL + quotient + NEWLINE_SEPARATOR);
+        printSymbol(shift, SPACE_SEPARATOR);
+        resultBuilder.append(SPACE_SEPARATOR + remainder + NEWLINE_SEPARATOR);
+        printSymbol(shift + 1, SPACE_SEPARATOR);
+        printSymbol(countDigits(quotient), HORIZONTAL_LINE_SEPARATOR);
     }
 
     private void printColumnWithDivisorSeparator(int quotient, int remainder) {
@@ -140,11 +142,11 @@ public class IntegerDivisionVisualizer {
         int dividendDigits = countDigits(dividend);
         int quotientDigits = countDigits(quotient);
 
-        resultBuilder.append(" " + remainder);
-        printCharacter(dividendDigits - quotientDigits, ' ');
-        resultBuilder.append("|");
-        printCharacter(Math.max(countDigits(divisor), countDigits(result)), '-');
-        resultBuilder.append("\n");
+        resultBuilder.append(SPACE_SEPARATOR + remainder);
+        printSymbol(dividendDigits - quotientDigits, SPACE_SEPARATOR);
+        resultBuilder.append(VERTICAL_BAR_SEPARATOR);
+        printSymbol(Math.max(countDigits(divisor), countDigits(result)), HORIZONTAL_LINE_SEPARATOR);
+        resultBuilder.append(NEWLINE_SEPARATOR);
 
     }
 
@@ -153,27 +155,27 @@ public class IntegerDivisionVisualizer {
         int dividendDigits = countDigits(dividend);
         int quotientDigits = countDigits(quotient);
 
-        printCharacter(shift, ' ');
-        resultBuilder.append("_" + quotient);
-        printCharacter(dividendDigits - quotientDigits, ' ');
-        resultBuilder.append("|" + result + "\n");
-        printCharacter(shift, ' ');
-        resultBuilder.append(" " + remainder + "\n ");
-        printCharacter(countDigits(quotient), '-');
+        printSymbol(shift, SPACE_SEPARATOR);
+        resultBuilder.append(MINUS_SYMBOL + quotient);
+        printSymbol(dividendDigits - quotientDigits, SPACE_SEPARATOR);
+        resultBuilder.append(VERTICAL_BAR_SEPARATOR + result + NEWLINE_SEPARATOR);
+        printSymbol(shift, SPACE_SEPARATOR);
+        resultBuilder.append(SPACE_SEPARATOR + remainder + NEWLINE_SEPARATOR + SPACE_SEPARATOR);
+        printSymbol(countDigits(quotient), HORIZONTAL_LINE_SEPARATOR);
 
     }
 
     private void printLastColumn(int remainder, int shift) {
 
-        resultBuilder.append("\n");
-        printCharacter(shift, ' ');
-        resultBuilder.append(" " + remainder + "\n");
+        resultBuilder.append(NEWLINE_SEPARATOR);
+        printSymbol(shift, SPACE_SEPARATOR);
+        resultBuilder.append(SPACE_SEPARATOR + remainder + NEWLINE_SEPARATOR);
     }
 
-    private void printCharacter(int numberOfTimes, char character) {
+    private void printSymbol(int numberOfTimes, String symbol) {
 
         for (int i = 1; i <= numberOfTimes; i++) {
-            resultBuilder.append(character);
+            resultBuilder.append(symbol);
         }
 
     }
