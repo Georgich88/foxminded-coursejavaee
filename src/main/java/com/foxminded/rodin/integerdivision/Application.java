@@ -14,8 +14,7 @@ public class Application {
         System.out.println("Enter divisor (> 0)");
         int divisor = Integer.parseInt(scanner.nextLine());
 
-        IntegerDivisionVisualizer integerDivisonVisualizer = new IntegerDivisionVisualizer();
-        String result = integerDivisonVisualizer.performDivision(dividend, divisor);
+        String result = IntegerDivisionVisualizer.performDivision(dividend, divisor);
 
         System.out.println(result);
 
