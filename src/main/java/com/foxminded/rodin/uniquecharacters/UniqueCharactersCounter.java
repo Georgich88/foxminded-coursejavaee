@@ -1,17 +1,12 @@
 package com.foxminded.rodin.uniquecharacters;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class UniqueCharactersCounter {
 
-    private Map<String, String> previousResults;
-
-    public UniqueCharactersCounter() {
-        previousResults = new HashMap<String, String>();
-    }
+    private Map<String, String> resultsByInputStrings = new HashMap<String, String>();
 
     /**
      * Gets the original sentence and return the calculated number of unique
@@ -26,32 +21,26 @@ public class UniqueCharactersCounter {
             throw new IllegalArgumentException("Input string should not be null.");
         }
 
-        if (previousResults.containsKey(inputString)) {
-            return previousResults.get(inputString);
+        if (resultsByInputStrings.containsKey(inputString)) {
+            return resultsByInputStrings.get(inputString);
         }
 
-        LinkedHashMap<Character, Integer> counterMap = new LinkedHashMap<Character, Integer>();
+        LinkedHashMap<Character, Integer> countersByCharacters = new LinkedHashMap<Character, Integer>();
         char[] charsOfSentence = inputString.toCharArray();
         StringBuilder resultBuilder = new StringBuilder();
 
         for (int i = 0; i < charsOfSentence.length; i++) {
             char currentCharacter = charsOfSentence[i];
-            if (counterMap.containsKey(currentCharacter)) {
-                int currentOccurenceNumber = counterMap.get(currentCharacter);
-                counterMap.put(currentCharacter, currentOccurenceNumber + 1);
-            } else {
-                counterMap.put(currentCharacter, 1);
-            }
+
+            countersByCharacters.computeIfPresent(currentCharacter, (k, v) -> v + 1);
+            countersByCharacters.computeIfAbsent(currentCharacter, (k) -> 1);
+
         }
 
-        Iterator<Map.Entry<Character, Integer>> counterMapIterator = counterMap.entrySet().iterator();
-        while (counterMapIterator.hasNext()) {
-            Map.Entry<Character, Integer> entry = counterMapIterator.next();
-            resultBuilder.append("\"" + entry.getKey() + "\" - " + entry.getValue() + "\n");
-        }
+        countersByCharacters.forEach((k, v) -> resultBuilder.append("\"" + k + "\" - " + v + "\n"));
 
-        previousResults.putIfAbsent(inputString, resultBuilder.toString());
-        return previousResults.get(inputString);
+        resultsByInputStrings.putIfAbsent(inputString, resultBuilder.toString());
+        return resultsByInputStrings.get(inputString);
 
     }
 

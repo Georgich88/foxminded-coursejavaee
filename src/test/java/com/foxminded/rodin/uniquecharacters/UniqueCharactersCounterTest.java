@@ -72,7 +72,7 @@ public class UniqueCharactersCounterTest {
     }    
 
     @Test
-    public void shouldReturnNullPointerExceptionIfGetNullArgument() {
+    public void shouldReturnIllegalArgumentExceptionIfGetNullArgument() {
 
         assertThrows(IllegalArgumentException.class, () -> {
             UniqueCharactersCounter counter = new UniqueCharactersCounter();
