@@ -15,18 +15,18 @@ public class UniqueCharactersCounter {
      * @param inputSentence - an original sentence.
      * @return presentation of the number of unique characters occurrence.
      */
-    public String countUniqueCharacters(String inputString) {
+    public String countUniqueCharacters(String inputSentence) {
 
-        if (inputString == null) {
+        if (inputSentence == null) {
             throw new IllegalArgumentException("Input string should not be null.");
         }
 
-        if (charactersAmountsBySentences.containsKey(inputString)) {
-            return charactersAmountsBySentences.get(inputString);
+        if (charactersAmountsBySentences.containsKey(inputSentence)) {
+            return charactersAmountsBySentences.get(inputSentence);
         }
 
         LinkedHashMap<Character, Integer> charactersAmounts = new LinkedHashMap<Character, Integer>();
-        char[] charsOfSentence = inputString.toCharArray();
+        char[] charsOfSentence = inputSentence.toCharArray();
         StringBuilder resultBuilder = new StringBuilder();
 
         for (int i = 0; i < charsOfSentence.length; i++) {
@@ -40,8 +40,8 @@ public class UniqueCharactersCounter {
 
         charactersAmounts.forEach((k, v) -> resultBuilder.append("\"" + k + "\" - " + v + "\n"));
 
-        charactersAmountsBySentences.putIfAbsent(inputString, resultBuilder.toString());
-        return charactersAmountsBySentences.get(inputString);
+        charactersAmountsBySentences.putIfAbsent(inputSentence, resultBuilder.toString());
+        return charactersAmountsBySentences.get(inputSentence);
 
     }
 
