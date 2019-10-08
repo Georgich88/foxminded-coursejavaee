@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class UniqueCharactersCounter {
 
-    private Map<String, String> resultsByInputStrings = new HashMap<String, String>();
+    private Map<String, String> charactersAmountsBySentences = new HashMap<String, String>();
 
     /**
      * Gets the original sentence and return the calculated number of unique
@@ -21,26 +21,27 @@ public class UniqueCharactersCounter {
             throw new IllegalArgumentException("Input string should not be null.");
         }
 
-        if (resultsByInputStrings.containsKey(inputString)) {
-            return resultsByInputStrings.get(inputString);
+        if (charactersAmountsBySentences.containsKey(inputString)) {
+            return charactersAmountsBySentences.get(inputString);
         }
 
-        LinkedHashMap<Character, Integer> countersByCharacters = new LinkedHashMap<Character, Integer>();
+        LinkedHashMap<Character, Integer> charactersAmounts = new LinkedHashMap<Character, Integer>();
         char[] charsOfSentence = inputString.toCharArray();
         StringBuilder resultBuilder = new StringBuilder();
 
         for (int i = 0; i < charsOfSentence.length; i++) {
+
             char currentCharacter = charsOfSentence[i];
 
-            countersByCharacters.computeIfPresent(currentCharacter, (k, v) -> v + 1);
-            countersByCharacters.computeIfAbsent(currentCharacter, (k) -> 1);
+            charactersAmounts.computeIfPresent(currentCharacter, (k, v) -> v + 1);
+            charactersAmounts.computeIfAbsent(currentCharacter, (k) -> 1);
 
         }
 
-        countersByCharacters.forEach((k, v) -> resultBuilder.append("\"" + k + "\" - " + v + "\n"));
+        charactersAmounts.forEach((k, v) -> resultBuilder.append("\"" + k + "\" - " + v + "\n"));
 
-        resultsByInputStrings.putIfAbsent(inputString, resultBuilder.toString());
-        return resultsByInputStrings.get(inputString);
+        charactersAmountsBySentences.putIfAbsent(inputString, resultBuilder.toString());
+        return charactersAmountsBySentences.get(inputString);
 
     }
 
