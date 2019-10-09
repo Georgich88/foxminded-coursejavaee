@@ -12,8 +12,8 @@ public class UniqueCharactersCounterTest {
 
         UniqueCharactersCounter counter = new UniqueCharactersCounter();
 
-        String firstResult = counter.countUniqueCharacters("hello world!");
-        String secondResult = counter.countUniqueCharacters("hello world!");
+        String firstResult = counter.performUniqueCharactersPresentation("hello world!");
+        String secondResult = counter.performUniqueCharactersPresentation("hello world!");
         
         String expectedResult = "\"h\" - 1\n" + 
                 "\"e\" - 1\n" + 
@@ -36,8 +36,8 @@ public class UniqueCharactersCounterTest {
 
         UniqueCharactersCounter counter = new UniqueCharactersCounter();
 
-        String firstResult = counter.countUniqueCharacters("hello world!");
-        String secondResult = counter.countUniqueCharacters("Hash table and linked list implementation of the Map interface");
+        String firstResult = counter.performUniqueCharactersPresentation("hello world!");
+        String secondResult = counter.performUniqueCharactersPresentation("Hash table and linked list implementation of the Map interface");
         
         assertEquals("\"h\" - 1\n" + 
                 "\"e\" - 1\n" + 
@@ -72,11 +72,11 @@ public class UniqueCharactersCounterTest {
     }    
 
     @Test
-    public void shouldReturnIllegalArgumentExceptionIfGetNullArgument() {
+    public void shouldThrowIllegalArgumentExceptionIfGetNullArgument() {
 
         assertThrows(IllegalArgumentException.class, () -> {
             UniqueCharactersCounter counter = new UniqueCharactersCounter();
-            String result = counter.countUniqueCharacters(null);
+            String result = counter.performUniqueCharactersPresentation(null);
         });
 
     }
@@ -85,10 +85,8 @@ public class UniqueCharactersCounterTest {
     public void shouldReturnEmptyStringIfGetEmptyString() {
 
         UniqueCharactersCounter counter = new UniqueCharactersCounter();
-
-        String result = counter.countUniqueCharacters("");
-
-        assertEquals(result, "");
+        
+        assertEquals("", counter.performUniqueCharactersPresentation(""));
 
     }
     
@@ -97,9 +95,7 @@ public class UniqueCharactersCounterTest {
 
         UniqueCharactersCounter counter = new UniqueCharactersCounter();
 
-        String result = counter.countUniqueCharacters("\n");
-
-        assertEquals(result, "\"\n\" - 1\n");
+        assertEquals("\"\n\" - 1\n", counter.performUniqueCharactersPresentation("\n"));
 
     }    
 

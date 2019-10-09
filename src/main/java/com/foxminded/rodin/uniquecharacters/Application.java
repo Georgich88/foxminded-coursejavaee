@@ -13,7 +13,7 @@ public class Application {
 
         UniqueCharactersCounter uniqueCharactersCounter = new UniqueCharactersCounter();
 
-        System.out.println(uniqueCharactersCounter.countUniqueCharacters(inputSentence));
+        System.out.println(uniqueCharactersCounter.performUniqueCharactersPresentation(inputSentence));
 
     }
 

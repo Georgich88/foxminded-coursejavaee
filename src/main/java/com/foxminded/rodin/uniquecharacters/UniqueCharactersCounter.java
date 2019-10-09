@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class UniqueCharactersCounter {
 
-    private Map<String, String> charactersAmountsBySentences = new HashMap<String, String>();
+    private Map<String, String> charactersAmountsPresentationBySentences = new HashMap<String, String>();
 
     /**
      * Gets the original sentence and return the calculated number of unique
@@ -15,14 +15,14 @@ public class UniqueCharactersCounter {
      * @param inputSentence - an original sentence.
      * @return presentation of the number of unique characters occurrence.
      */
-    public String countUniqueCharacters(String inputSentence) {
+    public String performUniqueCharactersPresentation(String inputSentence) {
 
         if (inputSentence == null) {
             throw new IllegalArgumentException("Input string should not be null.");
         }
 
-        if (charactersAmountsBySentences.containsKey(inputSentence)) {
-            return charactersAmountsBySentences.get(inputSentence);
+        if (charactersAmountsPresentationBySentences.containsKey(inputSentence)) {
+            return charactersAmountsPresentationBySentences.get(inputSentence);
         }
 
         LinkedHashMap<Character, Integer> charactersAmounts = new LinkedHashMap<Character, Integer>();
@@ -40,8 +40,8 @@ public class UniqueCharactersCounter {
 
         charactersAmounts.forEach((k, v) -> resultBuilder.append("\"" + k + "\" - " + v + "\n"));
 
-        charactersAmountsBySentences.putIfAbsent(inputSentence, resultBuilder.toString());
-        return charactersAmountsBySentences.get(inputSentence);
+        charactersAmountsPresentationBySentences.putIfAbsent(inputSentence, resultBuilder.toString());
+        return charactersAmountsPresentationBySentences.get(inputSentence);
 
     }
 
