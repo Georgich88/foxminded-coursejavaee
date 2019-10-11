@@ -30,7 +30,7 @@ public class UniqueCharactersCounterTest {
         assertEquals(expectedResult, secondResult);
     }
     
-    
+   
     @Test
     public void shouldReturnCorrectResultWhenGetDifferenStrings() {
 
@@ -71,6 +71,41 @@ public class UniqueCharactersCounterTest {
                 "\"c\" - 1\n", secondResult);
     }    
 
+    @Test
+    public void shouldCacheResultWhenGetSameStrings() {
+
+        UniqueCharactersCounter counter = new UniqueCharactersCounter();
+
+        counter.performUniqueCharactersPresentation("hello world!");
+        counter.performUniqueCharactersPresentation("hello world!");
+        
+        assertEquals(1, counter.getCacheSize());
+
+    }   
+    
+    @Test
+    public void shouldCacheResultWhenGetDifferenStrings() {
+
+        UniqueCharactersCounter counter = new UniqueCharactersCounter();
+
+        counter.performUniqueCharactersPresentation("hello world!");
+        counter.performUniqueCharactersPresentation("Hash table and linked list implementation of the Map interface");
+        
+        assertEquals(2, counter.getCacheSize());
+        
+    }   
+    
+    @Test
+    public void shouldGetResultFromCacheWhenGetSameStrings() {
+
+        UniqueCharactersCounter counter = new UniqueCharactersCounter();
+
+        counter.performUniqueCharactersPresentation("hello world!");
+       
+        assertEquals(true, counter.isSentenceCached("hello world!"));
+
+    }      
+    
     @Test
     public void shouldThrowIllegalArgumentExceptionIfGetNullArgument() {
 
