@@ -25,7 +25,7 @@ public class UniqueCharactersCounter {
         }
 
         if (isSentenceCached(inputSentence)) {
-            charactersAmounts = charactersAmountsBySentences.get(inputSentence);
+            charactersAmounts = getCharacterAmountsFromCache(inputSentence);
         } else {
             charactersAmounts = computeCharacterAmounts(inputSentence);
             charactersAmountsBySentences.put(inputSentence, charactersAmounts);
@@ -38,26 +38,15 @@ public class UniqueCharactersCounter {
     }
 
     /**
-     * Return the number of sentences that are cached.
+     * Return the cache.
      * 
-     * @return size of the local cache.
+     * @return the local cache.
      */
-    public int getCacheSize() {
-        return charactersAmountsBySentences.size();
+    public Map<String, LinkedHashMap<Character, Integer>> getCache() {
+        return new HashMap<String, LinkedHashMap<Character, Integer>>(charactersAmountsBySentences);
     }
 
-    /**
-     * Gets the original sentence and return whether it is cached or not.
-     * 
-     * @param inputSentence - an original sentence.
-     * @return whether the input sentence was cached before.
-     */
-    public boolean isSentenceCached(String inputSentence) {
-
-        if (inputSentence == null) {
-            throw new IllegalArgumentException("Input string should not be null.");
-        }
-
+    private boolean isSentenceCached(String inputSentence) {
         return charactersAmountsBySentences.containsKey(inputSentence);
     }
 
@@ -75,6 +64,21 @@ public class UniqueCharactersCounter {
 
         }
         return charactersAmounts;
+    }
+
+    /**
+     * Gets the original sentence and return cached characters' amounts.
+     * 
+     * @param inputSentence - an original sentence.
+     * @return cached characters' amounts.
+     */
+    public LinkedHashMap<Character, Integer> getCharacterAmountsFromCache(String inputSentence) {
+
+        if (inputSentence == null) {
+            throw new IllegalArgumentException("Input string should not be null.");
+        }
+
+        return new LinkedHashMap<Character, Integer>(charactersAmountsBySentences.get(inputSentence));
     }
 
 }
