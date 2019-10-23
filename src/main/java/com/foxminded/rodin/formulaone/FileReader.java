@@ -1,5 +1,6 @@
 package com.foxminded.rodin.formulaone;
 
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,7 +21,6 @@ public class FileReader {
             Path path = Paths.get("/" + logFileName);
             Stream<String> streamLogFile = Files.lines(path);
             return streamLogFile;
-
         } catch (Exception error) {
             throw new FileNotFoundException("Cannot proccess the log file: " + logFileName + error.getMessage());
         }
