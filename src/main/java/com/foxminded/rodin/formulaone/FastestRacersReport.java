@@ -1,10 +1,6 @@
 package com.foxminded.rodin.formulaone;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,23 +15,23 @@ import java.util.stream.Stream;
 public class FastestRacersReport {
 
     private static final String LOG_FIELDS_DELIMITER = "_";
-    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd_HH:mm:ss.SSS";
+    private static final String DATE_TIME_FORMAT = "yyyy-MM-dd_HH:mm:ss.SSS";
     private static final String REPORT_LINE_FORMAT = "%2d.%-17s|%-25s|%d:%02d.%03d";
     private static final String TOP_RACERS_SEPARATOR = "-------------------------------------------------------";
 
-    public static String getFastestRacersReport(String startLogFile, String endtLogFile, String abbreviationLogFile,
-            int topLapsNumber) throws IOException {
+    public static String getFastestRacersReport(String startLogFilePath, String endtLogFilePath,
+            String abbreviationLogFilePath, int topLapsNumber) throws IOException {
 
         StringBuilder boardBuilder = new StringBuilder();
 
-        List<Lap> laps = getFastesLaps(startLogFile, endtLogFile, abbreviationLogFile, topLapsNumber);
+        List<Lap> laps = getFastesLaps(startLogFilePath, endtLogFilePath, abbreviationLogFilePath, topLapsNumber);
         Integer lineNumber = 1;
 
         for (Lap lap : laps) {
 
             Racer racer = lap.getRacer();
             Duration duration = lap.getDuration();
-            String line = String.format(REPORT_LINE_FORMAT, lineNumber, racer.getName(), racer.getTeam(),
+            String line = String.format(REPORT_LINE_FORMAT, lineNumber, racer.getName(), racer.getTeamName(),
                     duration.toMinutes(), (duration.toMillis() % 60000) / 1000, duration.toMillis() % 1000);
             boardBuilder.append(line + "\n");
 
@@ -54,9 +50,9 @@ public class FastestRacersReport {
             int topLapsNumber)
             throws IOException {
 
-        Stream<String> startLogStream = readLogFile(startLogFile);
-        Stream<String> endLogStream = readLogFile(endtLogFile);
-        Stream<String> abbreviationLogStream = readLogFile(abbreviationLogFile);
+        Stream<String> startLogStream = FileReader.readLogFile(startLogFile);
+        Stream<String> endLogStream = FileReader.readLogFile(endtLogFile);
+        Stream<String> abbreviationLogStream = FileReader.readLogFile(abbreviationLogFile);
 
         List<Racer> racers = getRacers(abbreviationLogStream);
         List<Lap> laps = getLaps(racers, startLogStream, endLogStream);
@@ -96,7 +92,7 @@ public class FastestRacersReport {
 
             Duration duration = Duration.between(startTime, endTime);
 
-            Lap lap = new Lap(startTime, endTime, duration, racer);
+            Lap lap = new Lap(duration, racer);
             laps.add(lap);
 
         });
@@ -107,30 +103,13 @@ public class FastestRacersReport {
     private static Map<String, LocalDateTime> getDateTimeByAbbreviation(Stream<String> durationParts) {
 
         Map<String, LocalDateTime> dateTimeByAbbreviation = new HashMap<String, LocalDateTime>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
         dateTimeByAbbreviation = durationParts.collect(Collectors.toMap(line -> line.substring(0, 3),
                 line -> LocalDateTime.parse(line.substring(3), formatter)));
 
         return dateTimeByAbbreviation;
 
-    }
-
-    private static Stream<String> readLogFile(String logFileName) throws IOException {
-
-        if (logFileName == null || logFileName.isEmpty()) {
-            throw new IllegalArgumentException("Path to the log file should not be empty");
-        }
-
-        try {
-            String logFilePath = FastestRacersReport.class.getResource("/" + logFileName).getPath();
-            Path path = Paths.get(logFilePath);
-            Stream<String> streamLogFile = Files.lines(path);
-            return streamLogFile;
-
-        } catch (Exception err) {
-            throw new FileNotFoundException("Cannot proccess the log file: " + logFileName + err.getMessage());
-        }
     }
 
 }

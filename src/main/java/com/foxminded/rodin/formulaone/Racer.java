@@ -3,13 +3,13 @@ package com.foxminded.rodin.formulaone;
 public class Racer {
 
     private String name;
-    private String team;
+    private String teamName;
     private String abbreviation;
 
-    public Racer(String name, String team, String abbreviation) {
+    public Racer(String name, String teamName, String abbreviation) {
         super();
         this.name = name;
-        this.team = team;
+        this.teamName = teamName;
         this.abbreviation = abbreviation;
     }
 
@@ -21,12 +21,12 @@ public class Racer {
         this.name = name;
     }
 
-    public String getTeam() {
-        return team;
+    public String getTeamName() {
+        return teamName;
     }
 
-    public void setTeam(String team) {
-        this.team = team;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
     public String getAbbreviation() {
