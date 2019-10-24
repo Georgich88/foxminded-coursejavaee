@@ -19,12 +19,11 @@ public class FastestRacersReport {
     private static final String REPORT_LINE_FORMAT = "%2d.%-17s|%-25s|%d:%02d.%03d";
     private static final String TOP_RACERS_SEPARATOR = "-------------------------------------------------------";
 
-    public static String getFastestRacersReport(String startLogFilePath, String endtLogFilePath,
-            String abbreviationLogFilePath, int topLapsNumber) throws IOException {
+    public static String getFastestRacersReport(LapsDetails lapsDetails, int topLapsNumber) throws IOException {
 
         StringBuilder boardBuilder = new StringBuilder();
 
-        List<Lap> laps = getFastesLaps(startLogFilePath, endtLogFilePath, abbreviationLogFilePath, topLapsNumber);
+        List<Lap> laps = getLaps(lapsDetails);
         Integer lineNumber = 1;
 
         for (Lap lap : laps) {
@@ -46,39 +45,13 @@ public class FastestRacersReport {
 
     }
 
-    private static List<Lap> getFastesLaps(String startLogFile, String endtLogFile, String abbreviationLogFile,
-            int topLapsNumber)
-            throws IOException {
+    private static List<Lap> getLaps(LapsDetails lapsDetails) {
 
-        Stream<String> startLogStream = FileReader.readLogFile(startLogFile);
-        Stream<String> endLogStream = FileReader.readLogFile(endtLogFile);
-        Stream<String> abbreviationLogStream = FileReader.readLogFile(abbreviationLogFile);
+        Stream<String> abbreviationLogLines = lapsDetails.getAbbreviationLogStream();
+        Stream<String> startLogLines = lapsDetails.getStartLogStream();
+        Stream<String> endLogLines = lapsDetails.getEndLogStream();
 
-        List<Racer> racers = getRacers(abbreviationLogStream);
-        List<Lap> laps = getLaps(racers, startLogStream, endLogStream);
-
-        laps.sort(Comparator.comparing(racer -> racer.getDuration()));
-
-        return laps;
-
-    }
-
-    private static List<Racer> getRacers(Stream<String> abbreviationLogLines) {
-
-        List<Racer> racers = new ArrayList<Racer>();
-
-        abbreviationLogLines.forEach(v -> {
-            String[] racerData = v.split(LOG_FIELDS_DELIMITER);
-            if (racerData.length == 3) {
-                racers.add(new Racer(racerData[1], racerData[2], racerData[0]));
-            }
-        });
-
-        return racers;
-
-    }
-
-    private static List<Lap> getLaps(List<Racer> racers, Stream<String> startLogLines, Stream<String> endLogLines) {
+        List<Racer> racers = getRacers(abbreviationLogLines);
 
         Map<String, LocalDateTime> startsByAbbreviation = getDateTimeByAbbreviation(startLogLines);
         Map<String, LocalDateTime> endsByAbbreviation = getDateTimeByAbbreviation(endLogLines);
@@ -97,7 +70,24 @@ public class FastestRacersReport {
 
         });
 
+        laps.sort(Comparator.comparing(lap -> lap.getDuration()));
+
         return laps;
+    }
+
+    private static List<Racer> getRacers(Stream<String> abbreviationLogLines) {
+
+        List<Racer> racers = new ArrayList<Racer>();
+
+        abbreviationLogLines.forEach(v -> {
+            String[] racerData = v.split(LOG_FIELDS_DELIMITER);
+            if (racerData.length == 3) {
+                racers.add(new Racer(racerData[1], racerData[2], racerData[0]));
+            }
+        });
+
+        return racers;
+
     }
 
     private static Map<String, LocalDateTime> getDateTimeByAbbreviation(Stream<String> durationParts) {
