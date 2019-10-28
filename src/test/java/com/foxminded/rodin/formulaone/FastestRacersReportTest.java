@@ -3,17 +3,15 @@ package com.foxminded.rodin.formulaone;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 public class FastestRacersReportTest {
 
     @Test
-    public void shouldReturnCorrectResultWhenGetsExampleLogs() throws IOException {
+    public void shouldReturnCorrectResultWhenGetsExampleLogs() {
 
-        LapsDetails lapsDetails = new LapsDetails();
-        String result = FastestRacersReport.getFastestRacersReport(lapsDetails, 15);
+        FastestRacersReport report = new FastestRacersReport();
+        String result = report.getFastestRacersReport(15);
 
         String expectedResult = " 1.Sebastian Vettel |FERRARI                  |1:04.415\n"
                 + " 2.Daniel Ricciardo |RED BULL RACING TAG HEUER|1:12.013\n"
@@ -41,10 +39,10 @@ public class FastestRacersReportTest {
     }
 
     @Test
-    public void shouldReturnCorrectResultWhenGetsTestLogs() throws IOException {
+    public void shouldReturnCorrectResultWhenGetsTestLogs() {
 
-        LapsDetails lapsDetails = new LapsDetails("startTest.log", "endTest.log", "abbreviationsTest.txt");
-        String result = FastestRacersReport.getFastestRacersReport(lapsDetails, 5);
+        FastestRacersReport report = new FastestRacersReport("startTest.log", "endTest.log", "abbreviationsTest.txt");
+        String result = report.getFastestRacersReport(5);
 
         String expectedResult = " 1.Esteban Ocon     |FORCE INDIA MERCEDES     |-7:-46.-972\n"
                 + " 2.Stan Vettel      |FERRARI                  |1:04.415\n"
@@ -72,31 +70,32 @@ public class FastestRacersReportTest {
     }
 
     @Test
-    public void shouldThrowsIOExceptionWhenGetsWrongFileNameLog() throws IOException {
+    public void shouldThrowsIllegalArgumentExceptionWhenGetsWrongFileNameLog() {
 
-        assertThrows(IOException.class, () -> {
-            LapsDetails lapsDetails = new LapsDetails("startWrong.log", "endWrong.log", "abbreviationsWrong.txt");
-            String result = FastestRacersReport.getFastestRacersReport(lapsDetails, 15);
+        assertThrows(IllegalArgumentException.class, () -> {
+            FastestRacersReport report = new FastestRacersReport("startWrong.log", "endWrong.log",
+                    "abbreviationsWrong.txt");
+            String result = report.getFastestRacersReport(15);
         });
 
     }
 
     @Test
-    public void shouldThrowsIllegalArgumentExceptionWhenGetsEmptyFileNameLog() throws IOException {
+    public void shouldThrowsIllegalArgumentExceptionWhenGetsEmptyFileNameLog() {
 
         assertThrows(IllegalArgumentException.class, () -> {
-            LapsDetails lapsDetails = new LapsDetails("", "end.log", "abbreviations.txt");
-            String result = FastestRacersReport.getFastestRacersReport(lapsDetails, 15);
+            FastestRacersReport report = new FastestRacersReport("", "end.log", "abbreviations.txt");
+            String result = report.getFastestRacersReport(15);
         });
 
     }
 
     @Test
-    public void shouldThrowsIllegalArgumentExceptionWhenGetsNullArguments() throws IOException {
+    public void shouldThrowsIllegalArgumentExceptionWhenGetsNullArguments() {
 
         assertThrows(IllegalArgumentException.class, () -> {
-            LapsDetails lapsDetails = new LapsDetails("start.log", null, "abbreviations.txt");
-            String result = FastestRacersReport.getFastestRacersReport(lapsDetails, 15);
+            FastestRacersReport report = new FastestRacersReport("start.log", null, "abbreviations.txt");
+            String result = report.getFastestRacersReport(15);
         });
 
     }
