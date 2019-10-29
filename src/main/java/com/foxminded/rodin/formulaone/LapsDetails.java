@@ -8,7 +8,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +22,16 @@ public class LapsDetails {
     private static final String LOG_ABBREVIATION_DEFAULT_NAME = "abbreviations.txt";
     private static final String LOG_FIELDS_DELIMITER = "_";
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd_HH:mm:ss.SSS";
+
+    private static final int LOG_START_END_ABBREVICATION_POSITION = 3;
+
+    private static final int LOG_ABBREVIATION_FIELDS_NUMBER = 3;
+
+    private static final int LOG_ABBREVIATION_ABBREVIATION_FIELD_INDEX = 0;
+    private static final int LOG_ABBREVIATION_RACER_NAME_FIELD_INDEX = 1;
+    private static final int LOG_ABBREVIATION_RACER_TEAM_NAME_FIELD_INDEX = 2;
+
+
 
     List<String> startLogLines;
     List<String> endLogLines;
@@ -49,7 +59,7 @@ public class LapsDetails {
         }
 
         try {
-            Path path = new File(FastestRacersReport.class.getResource("/" + logFileName).getFile()).toPath();
+            Path path = new File(FastestRacersReportMaker.class.getResource("/" + logFileName).getFile()).toPath();
             Stream<String> streamLogFile = Files.lines(path);
             return streamLogFile.collect(Collectors.toList());
         } catch (Exception error) {
@@ -61,8 +71,8 @@ public class LapsDetails {
 
         List<Racer> racers = getRacers(abbreviationLogLines);
 
-        Map<String, LocalDateTime> startsByAbbreviation = getDateTimeByAbbreviation(startLogLines);
-        Map<String, LocalDateTime> endsByAbbreviation = getDateTimeByAbbreviation(endLogLines);
+        Map<String, LocalDateTime> startsByAbbreviation = getStartEndTimeByAbbreviation(startLogLines);
+        Map<String, LocalDateTime> endsByAbbreviation = getStartEndTimeByAbbreviation(endLogLines);
 
         List<Lap> laps = new ArrayList<Lap>(racers.size());
 
@@ -73,14 +83,18 @@ public class LapsDetails {
 
             Duration duration = Duration.between(startTime, endTime);
 
-            Lap lap = new Lap(duration, racer);
-            laps.add(lap);
+            laps.add(createLap(racer, duration));
 
         });
 
-        laps.sort(Comparator.comparing(lap -> lap.getDuration()));
+        Collections.sort(laps);
 
         return laps;
+    }
+
+    private Lap createLap(Racer racer, Duration duration) {
+        Lap lap = new Lap(duration, racer);
+        return lap;
     }
 
     private List<Racer> getRacers(List<String> abbreviationLogLines) {
@@ -89,8 +103,10 @@ public class LapsDetails {
 
         abbreviationLogLines.forEach(v -> {
             String[] racerData = v.split(LOG_FIELDS_DELIMITER);
-            if (racerData.length == 3) {
-                racers.add(new Racer(racerData[1], racerData[2], racerData[0]));
+            if (racerData.length == LOG_ABBREVIATION_FIELDS_NUMBER) {
+                racers.add(new Racer(racerData[LOG_ABBREVIATION_RACER_NAME_FIELD_INDEX],
+                        racerData[LOG_ABBREVIATION_RACER_TEAM_NAME_FIELD_INDEX],
+                        racerData[LOG_ABBREVIATION_ABBREVIATION_FIELD_INDEX]));
             }
         });
 
@@ -98,16 +114,17 @@ public class LapsDetails {
 
     }
 
-    private static Map<String, LocalDateTime> getDateTimeByAbbreviation(List<String> durationParts) {
+    private Map<String, LocalDateTime> getStartEndTimeByAbbreviation(List<String> durationParts) {
 
-        Map<String, LocalDateTime> dateTimeByAbbreviation = new HashMap<String, LocalDateTime>();
+        Map<String, LocalDateTime> timeByAbbreviation = new HashMap<String, LocalDateTime>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
-        dateTimeByAbbreviation = durationParts.stream().collect(Collectors.toMap(line -> line.substring(0, 3),
-                line -> LocalDateTime.parse(line.substring(3), formatter)));
+        timeByAbbreviation = durationParts.stream()
+                .collect(Collectors.toMap(line -> line.substring(0, LOG_START_END_ABBREVICATION_POSITION),
+                        line -> LocalDateTime.parse(line.substring(LOG_START_END_ABBREVICATION_POSITION), formatter)));
 
 
-        return dateTimeByAbbreviation;
+        return timeByAbbreviation;
 
     }
 

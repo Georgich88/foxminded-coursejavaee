@@ -4,7 +4,7 @@ public class Application {
 
     public static void main(String[] args) {
 
-        FastestRacersReport report = new FastestRacersReport();
+        FastestRacersReportMaker report = new FastestRacersReportMaker();
         System.out.println(report.getFastestRacersReport());
 
     }

@@ -10,7 +10,7 @@ public class FastestRacersReportTest {
     @Test
     public void shouldReturnCorrectResultWhenGetsExampleLogs() {
 
-        FastestRacersReport report = new FastestRacersReport();
+        FastestRacersReportMaker report = new FastestRacersReportMaker();
         String result = report.getFastestRacersReport(15);
 
         String expectedResult = " 1.Sebastian Vettel |FERRARI                  |1:04.415\n"
@@ -41,7 +41,7 @@ public class FastestRacersReportTest {
     @Test
     public void shouldReturnCorrectResultWhenGetsTestLogs() {
 
-        FastestRacersReport report = new FastestRacersReport("startTest.log", "endTest.log", "abbreviationsTest.txt");
+        FastestRacersReportMaker report = new FastestRacersReportMaker("startTest.log", "endTest.log", "abbreviationsTest.txt");
         String result = report.getFastestRacersReport(5);
 
         String expectedResult = " 1.Esteban Ocon     |FORCE INDIA MERCEDES     |-7:-46.-972\n"
@@ -73,7 +73,7 @@ public class FastestRacersReportTest {
     public void shouldThrowsIllegalArgumentExceptionWhenGetsWrongFileNameLog() {
 
         assertThrows(IllegalArgumentException.class, () -> {
-            FastestRacersReport report = new FastestRacersReport("startWrong.log", "endWrong.log",
+            FastestRacersReportMaker report = new FastestRacersReportMaker("startWrong.log", "endWrong.log",
                     "abbreviationsWrong.txt");
             String result = report.getFastestRacersReport(15);
         });
@@ -84,7 +84,7 @@ public class FastestRacersReportTest {
     public void shouldThrowsIllegalArgumentExceptionWhenGetsEmptyFileNameLog() {
 
         assertThrows(IllegalArgumentException.class, () -> {
-            FastestRacersReport report = new FastestRacersReport("", "end.log", "abbreviations.txt");
+            FastestRacersReportMaker report = new FastestRacersReportMaker("", "end.log", "abbreviations.txt");
             String result = report.getFastestRacersReport(15);
         });
 
@@ -94,7 +94,7 @@ public class FastestRacersReportTest {
     public void shouldThrowsIllegalArgumentExceptionWhenGetsNullArguments() {
 
         assertThrows(IllegalArgumentException.class, () -> {
-            FastestRacersReport report = new FastestRacersReport("start.log", null, "abbreviations.txt");
+            FastestRacersReportMaker report = new FastestRacersReportMaker("start.log", null, "abbreviations.txt");
             String result = report.getFastestRacersReport(15);
         });
 
