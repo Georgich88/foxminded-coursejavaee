@@ -27,9 +27,9 @@ public class LapsDetails {
 
     private static final int LOG_ABBREVIATION_FIELDS_NUMBER = 3;
 
-    private static final int LOG_ABBREVIATION_ABBREVIATION_FIELD_INDEX = 0;
-    private static final int LOG_ABBREVIATION_RACER_NAME_FIELD_INDEX = 1;
-    private static final int LOG_ABBREVIATION_RACER_TEAM_NAME_FIELD_INDEX = 2;
+    private static final int ABBREVIATION_FIELD_INDEX = 0;
+    private static final int RACER_NAME_FIELD_INDEX = 1;
+    private static final int RACER_TEAM_NAME_FIELD_INDEX = 2;
 
 
 
@@ -62,8 +62,8 @@ public class LapsDetails {
             Path path = new File(FastestRacersReportMaker.class.getResource("/" + logFileName).getFile()).toPath();
             Stream<String> streamLogFile = Files.lines(path);
             return streamLogFile.collect(Collectors.toList());
-        } catch (Exception error) {
-            throw new IllegalArgumentException("Cannot proccess the log file: " + logFileName + error.getMessage());
+        } catch (Exception exception) {
+            throw new IllegalArgumentException("Cannot proccess the log file: " + logFileName + exception.getMessage());
         }
     }
 
@@ -71,19 +71,14 @@ public class LapsDetails {
 
         List<Racer> racers = getRacers(abbreviationLogLines);
 
-        Map<String, LocalDateTime> startsByAbbreviation = getStartEndTimeByAbbreviation(startLogLines);
-        Map<String, LocalDateTime> endsByAbbreviation = getStartEndTimeByAbbreviation(endLogLines);
+        Map<String, LocalDateTime> startsByAbbreviation = getTimeByAbbreviation(startLogLines);
+        Map<String, LocalDateTime> endsByAbbreviation = getTimeByAbbreviation(endLogLines);
 
         List<Lap> laps = new ArrayList<Lap>(racers.size());
 
         racers.forEach(racer -> {
 
-            LocalDateTime startTime = startsByAbbreviation.get(racer.getAbbreviation());
-            LocalDateTime endTime = endsByAbbreviation.get(racer.getAbbreviation());
-
-            Duration duration = Duration.between(startTime, endTime);
-
-            laps.add(createLap(racer, duration));
+            laps.add(createLap(racer, startsByAbbreviation, endsByAbbreviation));
 
         });
 
@@ -92,7 +87,14 @@ public class LapsDetails {
         return laps;
     }
 
-    private Lap createLap(Racer racer, Duration duration) {
+    private Lap createLap(Racer racer, Map<String, LocalDateTime> startsByAbbreviation,
+            Map<String, LocalDateTime> endsByAbbreviation) {
+
+        LocalDateTime startTime = startsByAbbreviation.get(racer.getAbbreviation());
+        LocalDateTime endTime = endsByAbbreviation.get(racer.getAbbreviation());
+
+        Duration duration = Duration.between(startTime, endTime);
+
         Lap lap = new Lap(duration, racer);
         return lap;
     }
@@ -104,9 +106,8 @@ public class LapsDetails {
         abbreviationLogLines.forEach(v -> {
             String[] racerData = v.split(LOG_FIELDS_DELIMITER);
             if (racerData.length == LOG_ABBREVIATION_FIELDS_NUMBER) {
-                racers.add(new Racer(racerData[LOG_ABBREVIATION_RACER_NAME_FIELD_INDEX],
-                        racerData[LOG_ABBREVIATION_RACER_TEAM_NAME_FIELD_INDEX],
-                        racerData[LOG_ABBREVIATION_ABBREVIATION_FIELD_INDEX]));
+                racers.add(new Racer(racerData[RACER_NAME_FIELD_INDEX], racerData[RACER_TEAM_NAME_FIELD_INDEX],
+                        racerData[ABBREVIATION_FIELD_INDEX]));
             }
         });
 
@@ -114,7 +115,7 @@ public class LapsDetails {
 
     }
 
-    private Map<String, LocalDateTime> getStartEndTimeByAbbreviation(List<String> durationParts) {
+    private Map<String, LocalDateTime> getTimeByAbbreviation(List<String> durationParts) {
 
         Map<String, LocalDateTime> timeByAbbreviation = new HashMap<String, LocalDateTime>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
