@@ -28,17 +28,17 @@ public class FastestRacersReportMaker {
 
         List<Lap> laps = lapsDetails.getLaps();
 
-        for (int lineNumber = 1; lineNumber <= laps.size(); lineNumber++) {
+        for (int i = 0; i < laps.size(); i++) {
 
-            Lap lap = laps.get(lineNumber - 1);
+            Lap lap = laps.get(i);
             Racer racer = lap.getRacer();
             Duration duration = lap.getDuration();
 
-            String line = String.format(REPORT_LINE_FORMAT, lineNumber, racer.getName(), racer.getTeamName(),
+            String line = String.format(REPORT_LINE_FORMAT, i + 1, racer.getName(), racer.getTeamName(),
                     duration.toMinutes(), durationSeconds(duration), durationMillis(duration));
             boardBuilder.append(line + "\n");
 
-            if (lineNumber == topLapsNumber) {
+            if (i + 1 == topLapsNumber) {
                 boardBuilder.append(TOP_RACERS_SEPARATOR + "\n");
             }
 
