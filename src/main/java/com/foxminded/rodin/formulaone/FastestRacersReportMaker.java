@@ -8,6 +8,10 @@ public class FastestRacersReportMaker {
     private static final String TOP_RACERS_SEPARATOR = "-------------------------------------------------------";
     private static final String REPORT_LINE_FORMAT = "%2d.%-17s|%-25s|%d:%02d.%03d";
     private static final int DEFAULT_TOP_LAPS_NUMBER = 15;
+
+    private static final int MILLIS_PER_MINUTE = 60_000;
+    private static final int MILLIS_PER_SECOND = 1_000;
+
     private LapsDetails lapsDetails;
 
     public FastestRacersReportMaker() {
@@ -29,31 +33,34 @@ public class FastestRacersReportMaker {
         List<Lap> laps = lapsDetails.getLaps();
 
         for (int i = 0; i < laps.size(); i++) {
-
-            Lap lap = laps.get(i);
-            Racer racer = lap.getRacer();
-            Duration duration = lap.getDuration();
-
-            String line = String.format(REPORT_LINE_FORMAT, i + 1, racer.getName(), racer.getTeamName(),
-                    duration.toMinutes(), durationSeconds(duration), durationMillis(duration));
-            boardBuilder.append(line + "\n");
-
-            if (i + 1 == topLapsNumber) {
-                boardBuilder.append(TOP_RACERS_SEPARATOR + "\n");
-            }
-
+            addLapToReport(boardBuilder, laps.get(i), i + 1, topLapsNumber);
         }
 
         return boardBuilder.toString();
 
     }
 
-    private static long durationSeconds(Duration duration) {
-        return (duration.toMillis() % 60000) / 1000;
+    private void addLapToReport(StringBuilder boardBuilder, Lap lap, int lineNumber, int topLapsNumber) {
+
+        Racer racer = lap.getRacer();
+        Duration duration = lap.getDuration();
+
+        String line = String.format(REPORT_LINE_FORMAT, lineNumber, racer.getName(), racer.getTeamName(),
+                duration.toMinutes(), calculateDurationSeconds(duration), calculateDurationMillis(duration));
+        boardBuilder.append(line + "\n");
+
+        if (lineNumber == topLapsNumber) {
+            boardBuilder.append(TOP_RACERS_SEPARATOR + "\n");
+        }
+
     }
 
-    private static long durationMillis(Duration duration) {
-        return duration.toMillis() % 1000;
+    private static long calculateDurationSeconds(Duration duration) {
+        return (duration.toMillis() % MILLIS_PER_MINUTE) / MILLIS_PER_SECOND;
+    }
+
+    private static long calculateDurationMillis(Duration duration) {
+        return duration.toMillis() % MILLIS_PER_SECOND;
     }
 
 }
