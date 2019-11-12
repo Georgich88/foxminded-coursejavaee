@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.platform.commons.util.StringUtils;
 
@@ -59,8 +58,7 @@ public class LapsDetails {
         }
         try {
             Path path = new File(FastestRacersReportMaker.class.getResource("/" + logFileName).getFile()).toPath();
-            Stream<String> streamLogFile = Files.lines(path);
-            return streamLogFile.collect(Collectors.toList());
+            return Files.lines(path).collect(Collectors.toList());
         } catch (Exception exception) {
             String exceptionMessage = "Cannot proccess the log file: " + logFileName + "; " + exception.getMessage();
             throw new IllegalArgumentException(exceptionMessage, exception);
@@ -76,7 +74,7 @@ public class LapsDetails {
 
         List<Lap> laps = new ArrayList<Lap>(racers.size());
 
-        racers.forEach(racer -> {
+        racers.stream().forEach(racer -> {
             laps.add(createLap(racer, startsByAbbreviation, endsByAbbreviation));
         });
 

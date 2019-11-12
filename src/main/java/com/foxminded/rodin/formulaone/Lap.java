@@ -14,9 +14,6 @@ public class Lap implements Comparable<Lap> {
 
     @Override
     public int compareTo(Lap o) {
-        if (o == null) {
-            return -1;
-        }
         return duration.compareTo(o.getDuration());
     }
 

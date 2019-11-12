@@ -2,6 +2,7 @@ package com.foxminded.rodin.formulaone;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FastestRacersReportMaker {
 
@@ -32,9 +33,11 @@ public class FastestRacersReportMaker {
 
         List<Lap> laps = lapsDetails.getLaps();
 
-        for (int i = 0; i < laps.size(); i++) {
-            addLapToReport(boardBuilder, laps.get(i), i + 1, topLapsNumber);
-        }
+        AtomicInteger lineIndex = new AtomicInteger(0);
+
+        laps.stream().forEach(v -> {
+            addLapToReport(boardBuilder, v, lineIndex.incrementAndGet(), topLapsNumber);
+        });
 
         return boardBuilder.toString();
 
