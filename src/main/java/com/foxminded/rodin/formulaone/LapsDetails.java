@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.junit.platform.commons.util.StringUtils;
@@ -58,9 +57,11 @@ public class LapsDetails {
         }
         try {
             Path path = new File(FastestRacersReportMaker.class.getResource("/" + logFileName).getFile()).toPath();
-            return Files.lines(path).collect(Collectors.toList());
+            return Files.lines(path)
+                    .collect(Collectors.toList());
         } catch (Exception exception) {
-            String exceptionMessage = "Cannot proccess the log file: " + logFileName + "; " + exception.getMessage();
+            String exceptionMessage = String.format("Cannot proccess the log file: %s ; %s", logFileName,
+                    exception.getMessage());
             throw new IllegalArgumentException(exceptionMessage, exception);
         }
     }
@@ -74,9 +75,10 @@ public class LapsDetails {
 
         List<Lap> laps = new ArrayList<Lap>(racers.size());
 
-        racers.stream().forEach(racer -> {
-            laps.add(createLap(racer, startsByAbbreviation, endsByAbbreviation));
-        });
+        racers.stream()
+                .forEach(racer -> {
+                    laps.add(createLap(racer, startsByAbbreviation, endsByAbbreviation));
+                });
 
         Collections.sort(laps);
 
@@ -97,17 +99,13 @@ public class LapsDetails {
 
     private List<Racer> getRacers(List<String> abbreviationLogLines) {
 
-        List<Racer> racers = new ArrayList<Racer>();
-
-        Function<String, Racer> mapper = v -> {
-            String[] racerData = v.split(LOG_FIELDS_DELIMITER);
-            return new Racer(racerData[RACER_NAME_FIELD_INDEX], racerData[RACER_TEAM_NAME_FIELD_INDEX],
-                    racerData[ABBREVIATION_FIELD_INDEX]);
-        };
-
-        racers = abbreviationLogLines.stream().map(mapper).collect(Collectors.toList());
-
-        return racers;
+        return abbreviationLogLines.stream()
+                .map(v -> {
+                    String[] racerData = v.split(LOG_FIELDS_DELIMITER);
+                    return new Racer(racerData[RACER_NAME_FIELD_INDEX], racerData[RACER_TEAM_NAME_FIELD_INDEX],
+                            racerData[ABBREVIATION_FIELD_INDEX]);
+                })
+                .collect(Collectors.toList());
 
     }
 

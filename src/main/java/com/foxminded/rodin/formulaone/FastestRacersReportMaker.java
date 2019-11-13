@@ -2,7 +2,8 @@ package com.foxminded.rodin.formulaone;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.xml.ws.Holder;
 
 public class FastestRacersReportMaker {
 
@@ -33,17 +34,22 @@ public class FastestRacersReportMaker {
 
         List<Lap> laps = lapsDetails.getLaps();
 
-        AtomicInteger lineIndex = new AtomicInteger(0);
+        Holder<Integer> lineIndex = new Holder<>(0);
 
-        laps.stream().forEach(v -> {
-            addLapToReport(boardBuilder, v, lineIndex.incrementAndGet(), topLapsNumber);
+        laps.stream()
+            .forEach(v -> {
+                    lineIndex.value++;
+                    addLapToReport(boardBuilder, v, lineIndex.value);
+                    if (lineIndex.value == topLapsNumber) {
+                        boardBuilder.append(TOP_RACERS_SEPARATOR + "\n");
+                    }
         });
 
         return boardBuilder.toString();
 
     }
 
-    private void addLapToReport(StringBuilder boardBuilder, Lap lap, int lineNumber, int topLapsNumber) {
+    private void addLapToReport(StringBuilder boardBuilder, Lap lap, int lineNumber) {
 
         Racer racer = lap.getRacer();
         Duration duration = lap.getDuration();
@@ -51,10 +57,6 @@ public class FastestRacersReportMaker {
         String line = String.format(REPORT_LINE_FORMAT, lineNumber, racer.getName(), racer.getTeamName(),
                 duration.toMinutes(), calculateDurationSeconds(duration), calculateDurationMillis(duration));
         boardBuilder.append(line + "\n");
-
-        if (lineNumber == topLapsNumber) {
-            boardBuilder.append(TOP_RACERS_SEPARATOR + "\n");
-        }
 
     }
 
