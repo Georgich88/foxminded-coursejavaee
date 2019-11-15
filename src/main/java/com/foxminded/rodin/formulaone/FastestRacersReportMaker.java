@@ -24,15 +24,15 @@ public class FastestRacersReportMaker {
         this.lapsDetails = new LapsDetails(startLogFile, endtLogFile, abbreviationLogFile);
     }
 
-    public String getFastestRacersReport() {
-        return getFastestRacersReport(DEFAULT_TOP_LAPS_NUMBER);
+    public String generateFastestRacersReport() {
+        return generateFastestRacersReport(DEFAULT_TOP_LAPS_NUMBER);
     }
 
-    public String getFastestRacersReport(int topLapsNumber) {
+    public String generateFastestRacersReport(int topLapsNumber) {
 
         StringBuilder boardBuilder = new StringBuilder();
 
-        List<Lap> laps = lapsDetails.getLaps();
+        List<Lap> laps = lapsDetails.createLaps();
 
         Holder<Integer> lineIndex = new Holder<>(0);
 
@@ -40,9 +40,7 @@ public class FastestRacersReportMaker {
             .forEach(v -> {
                     lineIndex.value++;
                     addLapToReport(boardBuilder, v, lineIndex.value);
-                    if (lineIndex.value == topLapsNumber) {
-                        boardBuilder.append(TOP_RACERS_SEPARATOR + "\n");
-                    }
+                    addSeparatorToReport(boardBuilder, topLapsNumber, lineIndex.value);
         });
 
         return boardBuilder.toString();
@@ -57,6 +55,14 @@ public class FastestRacersReportMaker {
         String line = String.format(REPORT_LINE_FORMAT, lineNumber, racer.getName(), racer.getTeamName(),
                 duration.toMinutes(), calculateDurationSeconds(duration), calculateDurationMillis(duration));
         boardBuilder.append(line + "\n");
+
+    }
+
+    private void addSeparatorToReport(StringBuilder boardBuilder, int topLapsNumber, int lineNumber) {
+
+        if (lineNumber == topLapsNumber) {
+            boardBuilder.append(TOP_RACERS_SEPARATOR + "\n");
+        }
 
     }
 

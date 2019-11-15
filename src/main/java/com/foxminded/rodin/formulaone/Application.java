@@ -5,7 +5,7 @@ public class Application {
     public static void main(String[] args) {
 
         FastestRacersReportMaker report = new FastestRacersReportMaker();
-        System.out.println(report.getFastestRacersReport());
+        System.out.println(report.generateFastestRacersReport());
 
     }
 

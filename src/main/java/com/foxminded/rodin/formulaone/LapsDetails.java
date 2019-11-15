@@ -52,9 +52,11 @@ public class LapsDetails {
 
 
     private List<String> readLogFile(String logFileName) {
+
         if (StringUtils.isBlank(logFileName)) {
             throw new IllegalArgumentException("Path to the log file should not be empty");
         }
+
         try {
             Path path = new File(FastestRacersReportMaker.class.getResource("/" + logFileName).getFile()).toPath();
             return Files.lines(path)
@@ -64,14 +66,15 @@ public class LapsDetails {
                     exception.getMessage());
             throw new IllegalArgumentException(exceptionMessage, exception);
         }
+
     }
 
-    public List<Lap> getLaps() {
+    public List<Lap> createLaps() {
 
-        List<Racer> racers = getRacers(abbreviationLogLines);
+        List<Racer> racers = createRacers(abbreviationLogLines);
 
-        Map<String, LocalDateTime> startsByAbbreviation = getTimeByAbbreviation(startLogLines);
-        Map<String, LocalDateTime> endsByAbbreviation = getTimeByAbbreviation(endLogLines);
+        Map<String, LocalDateTime> startsByAbbreviation = computeTimeByAbbreviation(startLogLines);
+        Map<String, LocalDateTime> endsByAbbreviation = computeTimeByAbbreviation(endLogLines);
 
         List<Lap> laps = new ArrayList<Lap>(racers.size());
 
@@ -93,11 +96,10 @@ public class LapsDetails {
 
         Duration duration = Duration.between(startTime, endTime);
 
-        Lap lap = new Lap(duration, racer);
-        return lap;
+        return new Lap(duration, racer);
     }
 
-    private List<Racer> getRacers(List<String> abbreviationLogLines) {
+    private List<Racer> createRacers(List<String> abbreviationLogLines) {
 
         return abbreviationLogLines.stream()
                 .map(v -> {
@@ -109,7 +111,7 @@ public class LapsDetails {
 
     }
 
-    private Map<String, LocalDateTime> getTimeByAbbreviation(List<String> durationParts) {
+    private Map<String, LocalDateTime> computeTimeByAbbreviation(List<String> durationParts) {
 
         Map<String, LocalDateTime> timeByAbbreviation = new HashMap<String, LocalDateTime>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);

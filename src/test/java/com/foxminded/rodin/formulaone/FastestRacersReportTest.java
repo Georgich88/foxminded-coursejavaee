@@ -11,7 +11,7 @@ public class FastestRacersReportTest {
     public void shouldReturnCorrectResultWhenGetsExampleLogs() {
 
         FastestRacersReportMaker report = new FastestRacersReportMaker();
-        String result = report.getFastestRacersReport(15);
+        String result = report.generateFastestRacersReport(15);
 
         String expectedResult = " 1.Sebastian Vettel |FERRARI                  |1:04.415\n"
                 + " 2.Daniel Ricciardo |RED BULL RACING TAG HEUER|1:12.013\n"
@@ -42,7 +42,7 @@ public class FastestRacersReportTest {
     public void shouldReturnCorrectResultWhenGetsTestLogs() {
 
         FastestRacersReportMaker report = new FastestRacersReportMaker("startTest.log", "endTest.log", "abbreviationsTest.txt");
-        String result = report.getFastestRacersReport(5);
+        String result = report.generateFastestRacersReport(5);
 
         String expectedResult = " 1.Esteban Ocon     |FORCE INDIA MERCEDES     |-7:-46.-972\n"
                 + " 2.Stan Vettel      |FERRARI                  |1:04.415\n"
@@ -75,7 +75,7 @@ public class FastestRacersReportTest {
         assertThrows(IllegalArgumentException.class, () -> {
             FastestRacersReportMaker report = new FastestRacersReportMaker("startWrong.log", "endWrong.log",
                     "abbreviationsWrong.txt");
-            String result = report.getFastestRacersReport(15);
+            String result = report.generateFastestRacersReport(15);
         });
 
     }
@@ -85,7 +85,7 @@ public class FastestRacersReportTest {
 
         assertThrows(IllegalArgumentException.class, () -> {
             FastestRacersReportMaker report = new FastestRacersReportMaker("", "end.log", "abbreviations.txt");
-            String result = report.getFastestRacersReport(15);
+            String result = report.generateFastestRacersReport(15);
         });
 
     }
@@ -95,7 +95,7 @@ public class FastestRacersReportTest {
 
         assertThrows(IllegalArgumentException.class, () -> {
             FastestRacersReportMaker report = new FastestRacersReportMaker("start.log", null, "abbreviations.txt");
-            String result = report.getFastestRacersReport(15);
+            String result = report.generateFastestRacersReport(15);
         });
 
     }
