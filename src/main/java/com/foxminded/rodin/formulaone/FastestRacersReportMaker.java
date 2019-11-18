@@ -37,10 +37,21 @@ public class FastestRacersReportMaker {
         Holder<Integer> lineIndex = new Holder<>(0);
 
         laps.stream()
-            .forEach(v -> {
+                .limit(topLapsNumber)
+                .forEach(lap -> {
                     lineIndex.value++;
-                    addLapToReport(boardBuilder, v, lineIndex.value);
-                    addSeparatorToReport(boardBuilder, topLapsNumber, lineIndex.value);
+                    addLapToReport(boardBuilder, lap, lineIndex.value);
+        });
+        
+        if (lineIndex.value == topLapsNumber) {
+            addSeparatorToReport(boardBuilder);
+        }
+
+        laps.stream()
+                .skip(topLapsNumber)
+                .forEach(lap -> {
+                    lineIndex.value++;
+                    addLapToReport(boardBuilder, lap, lineIndex.value);
         });
 
         return boardBuilder.toString();
@@ -58,12 +69,8 @@ public class FastestRacersReportMaker {
 
     }
 
-    private void addSeparatorToReport(StringBuilder boardBuilder, int topLapsNumber, int lineNumber) {
-
-        if (lineNumber == topLapsNumber) {
+    private void addSeparatorToReport(StringBuilder boardBuilder) {
             boardBuilder.append(TOP_RACERS_SEPARATOR + "\n");
-        }
-
     }
 
     private static long calculateDurationSeconds(Duration duration) {
