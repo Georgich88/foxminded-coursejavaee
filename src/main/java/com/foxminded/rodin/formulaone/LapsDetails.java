@@ -62,8 +62,7 @@ public class LapsDetails {
             return Files.lines(path)
                     .collect(Collectors.toList());
         } catch (Exception exception) {
-            String exceptionMessage = String.format("Cannot proccess the log file: %s ; %s", logFileName,
-                    exception.getMessage());
+            String exceptionMessage = String.format("Cannot proccess the log file: %s", logFileName);
             throw new IllegalArgumentException(exceptionMessage, exception);
         }
 
@@ -102,13 +101,15 @@ public class LapsDetails {
     private List<Racer> createRacers(List<String> abbreviationLogLines) {
 
         return abbreviationLogLines.stream()
-                .map(v -> {
-                    String[] racerData = v.split(LOG_FIELDS_DELIMITER);
-                    return new Racer(racerData[RACER_NAME_FIELD_INDEX], racerData[RACER_TEAM_NAME_FIELD_INDEX],
-                            racerData[ABBREVIATION_FIELD_INDEX]);
-                })
+                .map(v -> createRacer(v))
                 .collect(Collectors.toList());
 
+    }
+
+    private Racer createRacer(String logLine) {
+        String[] racerData = logLine.split(LOG_FIELDS_DELIMITER);
+        return new Racer(racerData[RACER_NAME_FIELD_INDEX], racerData[RACER_TEAM_NAME_FIELD_INDEX],
+                racerData[ABBREVIATION_FIELD_INDEX]);
     }
 
     private Map<String, LocalDateTime> computeTimeByAbbreviation(List<String> durationParts) {

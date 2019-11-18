@@ -3,8 +3,6 @@ package com.foxminded.rodin.formulaone;
 import java.time.Duration;
 import java.util.List;
 
-import javax.xml.ws.Holder;
-
 public class FastestRacersReportMaker {
 
     private static final String TOP_RACERS_SEPARATOR = "-------------------------------------------------------";
@@ -34,25 +32,12 @@ public class FastestRacersReportMaker {
 
         List<Lap> laps = lapsDetails.createLaps();
 
-        Holder<Integer> lineIndex = new Holder<>(0);
-
-        laps.stream()
-                .limit(topLapsNumber)
-                .forEach(lap -> {
-                    lineIndex.value++;
-                    addLapToReport(boardBuilder, lap, lineIndex.value);
-        });
-        
-        if (lineIndex.value == topLapsNumber) {
-            addSeparatorToReport(boardBuilder);
+        for (int i = 0; i < laps.size(); i++) {
+            addLapToReport(boardBuilder, laps.get(i), i + 1);
+            if (i + 1 == topLapsNumber) {
+                addSeparatorToReport(boardBuilder);
+            }
         }
-
-        laps.stream()
-                .skip(topLapsNumber)
-                .forEach(lap -> {
-                    lineIndex.value++;
-                    addLapToReport(boardBuilder, lap, lineIndex.value);
-        });
 
         return boardBuilder.toString();
 
