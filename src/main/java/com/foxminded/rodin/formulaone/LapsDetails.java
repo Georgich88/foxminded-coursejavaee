@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -75,12 +74,9 @@ public class LapsDetails {
         Map<String, LocalDateTime> startsByAbbreviation = computeTimeByAbbreviation(startLogLines);
         Map<String, LocalDateTime> endsByAbbreviation = computeTimeByAbbreviation(endLogLines);
 
-        List<Lap> laps = new ArrayList<Lap>(racers.size());
-
-        racers.stream()
-                .forEach(racer -> {
-                    laps.add(createLap(racer, startsByAbbreviation, endsByAbbreviation));
-                });
+        List<Lap> laps = racers.stream()
+                .map(racer -> createLap(racer, startsByAbbreviation, endsByAbbreviation))
+                .collect(Collectors.toList());
 
         Collections.sort(laps);
 
